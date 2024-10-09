@@ -1,0 +1,11 @@
+Flask
+Flask-SQLAlchemy
+Tesseract
+TensorFlow
+torch
+pandas
+numpy
+opencv-python
+scikit-learn
+pytesseract
+python-dotenv

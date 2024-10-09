@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocumentFlow AI - Upload Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .upload-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow: auto;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DocumentFlow AI</h1>
+        <p>Automate data extraction, validation, and classification</p>
+    </header>
+
+    <main>
+        <section class="upload-section">
+            <h2>Upload Your Document</h2>
+            <form id="userInputForm" enctype="multipart/form-data">
+                <input type="text" id="userName" name="userName" placeholder="Your Name" required />
+                <input type="email" id="userEmail" name="userEmail" placeholder="Your Email" required />
+                <select id="documentType" name="documentType" required>
+                    <option value="">Select Document Type</option>
+                    <option value="certificate">Certificate</option>
+                    <option value="invoice">Invoice</option>
+                    <option value="license">License</option>
+                </select>
+                <input type="file" id="documentUpload" name="document" accept=".pdf, .jpg, .png, .jpeg" required />
+                <button type="submit">Submit</button>
+            </form>
+            <p id="uploadMessage"></p>
+        </section>
+
+        <section class="

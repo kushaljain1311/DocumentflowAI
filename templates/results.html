@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocumentFlow AI</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        p {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .success {
+            border: 1px solid #28a745;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            border: 1px solid #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DocumentFlow AI</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Extracted Text</h2>
+            <pre>{{ extracted_text }}</pre>
+        </section>
+
+        <section>
+            <h2>Validation Results</h2>
+            <p class="{{ 'success' if validation_message == 'Data is valid.' else 'error' }}">
+                {{ validation_message }}
+            </p>
+        </section>
+    </main>
+</body>
+</html>

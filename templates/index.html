@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocumentFlow AI</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        p {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .success {
+            border: 1px solid #28a745;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            border: 1px solid #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .validity {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .valid {
+            color: #28a745;
+        }
+
+        .invalid {
+            color: #dc3545;
+        }
+
+        /* Pop-up Styles */
+        #loading-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        #loading-popup .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #loading-popup .popup-content h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .spinner {
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #007bff;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DocumentFlow AI</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Upload Your Document</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="showLoadingPopup()">
+                <select name="document_type" required>
+                    <option value="">Select Document Type</option>
+                    <option value="aadhaar">Aadhaar</option>
+                    <option value="pan">PAN</option>
+                    <option value="voter_id">Voter ID</option>
+                    <option value="driving_license">Driving License</option>
+                    <option value="passport">Passport</option>
+                    <option value="cheque">Cheque</option>
+                </select>
+                <input type="file" name="image" accept=".png, .jpg, .jpeg" required />
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Extracted Text</h2>
+            <pre>{{ extracted_text }}</pre>
+        </section>
+
+        <section>
+            <h2>Validation Results</h2>
+            <p class="{{ 'success' if validation_message and 'valid' in validation_message.lower() else 'error' }}">
+                {{ validation_message if validation_message else 'No validation results available.' }}
+            </p>
+        </section>
+
+        <!-- New Section for Aadhaar Validity -->
+        <section>
+            <h2>Aadhaar Validity</h2>
+            {% if document_type == 'aadhaar' %}
+                {% if validity_status is not none %}
+                    <p class="validity {{ 'valid' if validity_status else 'invalid' }}">
+                        Aadhaar Number is {{ 'Valid' if validity_status else 'Invalid' }}.
+                    </p>
+                {% else %}
+                    <p class="validity">No Aadhaar number checked yet.</p>
+                {% endif %}
+                {% if ml_prediction is not none %}
+                    <p class="validity {{ 'valid' if ml_prediction == 'Valid' else 'invalid' }}">
+                        Aadhaar Card is: {{ ml_prediction }}.
+                    </p>
+                {% endif %}
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Loading Pop-up Overlay -->
+    <div id="loading-popup">
+        <div class="popup-content">
+            <h3>Verifying Document...</h3>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        // Show the loading pop-up
+        function showLoadingPopup() {
+            document.getElementById('loading-popup').style.display = 'block';
+        }
+
+        // Hide the loading pop-up after page load
+        window.onload = function() {
+            document.getElementById('loading-popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
